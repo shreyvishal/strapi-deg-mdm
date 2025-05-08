@@ -362,6 +362,173 @@ export interface AdminUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiApplianceAppliance extends Schema.CollectionType {
+  collectionName: 'appliances';
+  info: {
+    displayName: 'Appliance';
+    pluralName: 'appliances';
+    singularName: 'appliance';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    baseKWh: Attribute.Float;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::appliance.appliance',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    description: Attribute.String;
+    name: Attribute.String;
+    powerRating: Attribute.Integer;
+    publishedAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::appliance.appliance',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiEnergyResourceEnergyResource extends Schema.CollectionType {
+  collectionName: 'energy_resources';
+  info: {
+    displayName: 'Energy Resource';
+    pluralName: 'energy-resources';
+    singularName: 'energy-resource';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::energy-resource.energy-resource',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    meter: Attribute.Relation<
+      'api::energy-resource.energy-resource',
+      'oneToOne',
+      'api::meter.meter'
+    >;
+    name: Attribute.String;
+    publishedAt: Attribute.DateTime;
+    type: Attribute.Enumeration<['CONSUMER', 'PROSUMER']>;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::energy-resource.energy-resource',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiMeterDatasetMeterDataset extends Schema.CollectionType {
+  collectionName: 'meter_datasets';
+  info: {
+    displayName: 'Meter Dataset';
+    pluralName: 'meter-datasets';
+    singularName: 'meter-dataset';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    avgCurrent: Attribute.Float;
+    avgVoltage: Attribute.Float;
+    consumptionKVAh: Attribute.Float;
+    consumptionKWh: Attribute.Float;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::meter-dataset.meter-dataset',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    meter: Attribute.Relation<
+      'api::meter-dataset.meter-dataset',
+      'oneToOne',
+      'api::meter.meter'
+    >;
+    powerFactor: Attribute.Float &
+      Attribute.SetMinMax<
+        {
+          max: 1;
+          min: 0.8;
+        },
+        number
+      >;
+    productionKWh: Attribute.Float;
+    publishedAt: Attribute.DateTime;
+    reactivePowerKVAR: Attribute.Float;
+    timestamp: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::meter-dataset.meter-dataset',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiMeterMeter extends Schema.CollectionType {
+  collectionName: 'meters';
+  info: {
+    description: '';
+    displayName: 'Meter';
+    pluralName: 'meters';
+    singularName: 'meter';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    city: Attribute.String;
+    code: Attribute.String & Attribute.Unique;
+    consumptionLoadFactor: Attribute.Float & Attribute.DefaultTo<1>;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::meter.meter',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    energyResource: Attribute.Relation<
+      'api::meter.meter',
+      'oneToOne',
+      'api::energy-resource.energy-resource'
+    >;
+    latitude: Attribute.Decimal;
+    longitude: Attribute.Decimal;
+    parent: Attribute.Relation<
+      'api::meter.meter',
+      'oneToOne',
+      'api::meter.meter'
+    >;
+    pincode: Attribute.String;
+    productionLoadFactor: Attribute.Float & Attribute.DefaultTo<0>;
+    publishedAt: Attribute.DateTime;
+    state: Attribute.String;
+    type: Attribute.Enumeration<['ONE-PH', 'THREE-PH', 'SMART', 'NETMETER']>;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::meter.meter',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease extends Schema.CollectionType {
   collectionName: 'strapi_releases';
   info: {
@@ -798,6 +965,10 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::appliance.appliance': ApiApplianceAppliance;
+      'api::energy-resource.energy-resource': ApiEnergyResourceEnergyResource;
+      'api::meter-dataset.meter-dataset': ApiMeterDatasetMeterDataset;
+      'api::meter.meter': ApiMeterMeter;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "appliances",
+  "info": {
+    "singularName": "appliance",
+    "pluralName": "appliances",
+    "displayName": "Appliance"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "powerRating": {
+      "type": "integer"
+    },
+    "baseKWh": {
+      "type": "float"
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}
