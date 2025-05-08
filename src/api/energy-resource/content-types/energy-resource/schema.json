@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "energy_resources",
+  "info": {
+    "singularName": "energy-resource",
+    "pluralName": "energy-resources",
+    "displayName": "Energy Resource"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "CONSUMER",
+        "PROSUMER"
+      ]
+    },
+    "meter": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::meter.meter",
+      "mappedBy": "energyResource"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "meter_datasets",
+  "info": {
+    "singularName": "meter-dataset",
+    "pluralName": "meter-datasets",
+    "displayName": "Meter Dataset"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "meter": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::meter.meter"
+    },
+    "consumptionKWh": {
+      "type": "float"
+    },
+    "productionKWh": {
+      "type": "float"
+    },
+    "consumptionKVAh": {
+      "type": "float"
+    },
+    "avgCurrent": {
+      "type": "float"
+    },
+    "avgVoltage": {
+      "type": "float"
+    },
+    "reactivePowerKVAR": {
+      "type": "float"
+    },
+    "powerFactor": {
+      "type": "float",
+      "min": 0.8,
+      "max": 1
+    },
+    "timestamp": {
+      "type": "datetime"
+    }
+  }
+}
