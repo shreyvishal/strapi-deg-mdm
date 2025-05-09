@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "p2p_trades",
+  "info": {
+    "singularName": "p2p-trade",
+    "pluralName": "p2p-trades",
+    "displayName": "P2P Trade"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "buyer_meter_id": {
+      "type": "string",
+      "required": true
+    },
+    "seller_meter_id": {
+      "type": "string",
+      "required": true
+    },
+    "units_kWh": {
+      "required": true,
+      "type": "float"
+    },
+    "price_per_kWh": {
+      "type": "float",
+      "required": true
+    }
+  }
+}

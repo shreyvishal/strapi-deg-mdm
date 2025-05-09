@@ -18,8 +18,15 @@
     },
     "parent": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::meter.meter"
+      "relation": "manyToOne",
+      "target": "api::meter.meter",
+      "inversedBy": "children"
+    },
+    "children": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::meter.meter",
+      "mappedBy": "parent"
     },
     "energyResource": {
       "type": "relation",
@@ -58,6 +65,12 @@
     },
     "pincode": {
       "type": "string"
+    },
+    "appliances": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::appliance.appliance",
+      "mappedBy": "meter"
     }
   }
 }

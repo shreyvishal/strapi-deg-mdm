@@ -22,6 +22,12 @@
     },
     "description": {
       "type": "string"
+    },
+    "meter": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::meter.meter",
+      "inversedBy": "appliances"
     }
   }
 }

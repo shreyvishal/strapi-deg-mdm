@@ -382,6 +382,11 @@ export interface ApiApplianceAppliance extends Schema.CollectionType {
     > &
       Attribute.Private;
     description: Attribute.String;
+    meter: Attribute.Relation<
+      'api::appliance.appliance',
+      'manyToOne',
+      'api::meter.meter'
+    >;
     name: Attribute.String;
     powerRating: Attribute.Integer;
     publishedAt: Attribute.DateTime;
@@ -492,6 +497,16 @@ export interface ApiMeterMeter extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
+    appliances: Attribute.Relation<
+      'api::meter.meter',
+      'oneToMany',
+      'api::appliance.appliance'
+    >;
+    children: Attribute.Relation<
+      'api::meter.meter',
+      'oneToMany',
+      'api::meter.meter'
+    >;
     city: Attribute.String;
     code: Attribute.String & Attribute.Unique;
     consumptionLoadFactor: Attribute.Float & Attribute.DefaultTo<1>;
@@ -511,7 +526,7 @@ export interface ApiMeterMeter extends Schema.CollectionType {
     longitude: Attribute.Decimal;
     parent: Attribute.Relation<
       'api::meter.meter',
-      'oneToOne',
+      'manyToOne',
       'api::meter.meter'
     >;
     pincode: Attribute.String;
@@ -522,6 +537,39 @@ export interface ApiMeterMeter extends Schema.CollectionType {
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<
       'api::meter.meter',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiP2PTradeP2PTrade extends Schema.CollectionType {
+  collectionName: 'p2p_trades';
+  info: {
+    displayName: 'P2P Trade';
+    pluralName: 'p2p-trades';
+    singularName: 'p2p-trade';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    buyer_meter_id: Attribute.String & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::p2p-trade.p2p-trade',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    price_per_kWh: Attribute.Float & Attribute.Required;
+    publishedAt: Attribute.DateTime;
+    seller_meter_id: Attribute.String & Attribute.Required;
+    units_kWh: Attribute.Float & Attribute.Required;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::p2p-trade.p2p-trade',
       'oneToOne',
       'admin::user'
     > &
@@ -969,6 +1017,7 @@ declare module '@strapi/types' {
       'api::energy-resource.energy-resource': ApiEnergyResourceEnergyResource;
       'api::meter-dataset.meter-dataset': ApiMeterDatasetMeterDataset;
       'api::meter.meter': ApiMeterMeter;
+      'api::p2p-trade.p2p-trade': ApiP2PTradeP2PTrade;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
