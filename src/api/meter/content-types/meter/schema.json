@@ -65,12 +65,6 @@
     },
     "pincode": {
       "type": "string"
-    },
-    "appliances": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::appliance.appliance",
-      "mappedBy": "meter"
     }
   }
 }

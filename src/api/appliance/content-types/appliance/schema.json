@@ -23,10 +23,10 @@
     "description": {
       "type": "string"
     },
-    "meter": {
+    "energy_resource": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::meter.meter",
+      "target": "api::energy-resource.energy-resource",
       "inversedBy": "appliances"
     }
   }

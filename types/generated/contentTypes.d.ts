@@ -382,10 +382,10 @@ export interface ApiApplianceAppliance extends Schema.CollectionType {
     > &
       Attribute.Private;
     description: Attribute.String;
-    meter: Attribute.Relation<
+    energy_resource: Attribute.Relation<
       'api::appliance.appliance',
       'manyToOne',
-      'api::meter.meter'
+      'api::energy-resource.energy-resource'
     >;
     name: Attribute.String;
     powerRating: Attribute.Integer;
@@ -403,6 +403,7 @@ export interface ApiApplianceAppliance extends Schema.CollectionType {
 export interface ApiEnergyResourceEnergyResource extends Schema.CollectionType {
   collectionName: 'energy_resources';
   info: {
+    description: '';
     displayName: 'Energy Resource';
     pluralName: 'energy-resources';
     singularName: 'energy-resource';
@@ -411,6 +412,11 @@ export interface ApiEnergyResourceEnergyResource extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
+    appliances: Attribute.Relation<
+      'api::energy-resource.energy-resource',
+      'oneToMany',
+      'api::appliance.appliance'
+    >;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::energy-resource.energy-resource',
@@ -497,11 +503,6 @@ export interface ApiMeterMeter extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    appliances: Attribute.Relation<
-      'api::meter.meter',
-      'oneToMany',
-      'api::appliance.appliance'
-    >;
     children: Attribute.Relation<
       'api::meter.meter',
       'oneToMany',

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "energy-resource",
     "pluralName": "energy-resources",
-    "displayName": "Energy Resource"
+    "displayName": "Energy Resource",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -26,6 +27,12 @@
       "relation": "oneToOne",
       "target": "api::meter.meter",
       "mappedBy": "energyResource"
+    },
+    "appliances": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::appliance.appliance",
+      "mappedBy": "energy_resource"
     }
   }
 }
