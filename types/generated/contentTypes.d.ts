@@ -382,11 +382,6 @@ export interface ApiApplianceAppliance extends Schema.CollectionType {
     > &
       Attribute.Private;
     description: Attribute.String;
-    energy_resource: Attribute.Relation<
-      'api::appliance.appliance',
-      'manyToOne',
-      'api::energy-resource.energy-resource'
-    >;
     name: Attribute.String;
     powerRating: Attribute.Integer;
     publishedAt: Attribute.DateTime;

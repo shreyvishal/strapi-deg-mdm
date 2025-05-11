@@ -22,12 +22,6 @@
     },
     "description": {
       "type": "string"
-    },
-    "energy_resource": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::energy-resource.energy-resource",
-      "inversedBy": "appliances"
     }
   }
 }

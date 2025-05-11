@@ -31,8 +31,7 @@
     "appliances": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::appliance.appliance",
-      "mappedBy": "energy_resource"
+      "target": "api::appliance.appliance"
     }
   }
 }
