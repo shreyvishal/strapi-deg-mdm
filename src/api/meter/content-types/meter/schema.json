@@ -65,6 +65,15 @@
     },
     "pincode": {
       "type": "string"
+    },
+    "max_capacity_KW": {
+      "type": "decimal"
+    },
+    "transformer": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::transformer.transformer",
+      "inversedBy": "meters"
     }
   }
 }

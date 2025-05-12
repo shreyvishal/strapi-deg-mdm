@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ders",
+  "info": {
+    "singularName": "der",
+    "pluralName": "ders",
+    "displayName": "der"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "switched_on": {
+      "type": "boolean",
+      "default": false
+    },
+    "appliance": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::appliance.appliance"
+    },
+    "energy_resource": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::energy-resource.energy-resource",
+      "inversedBy": "ders"
+    }
+  }
+}

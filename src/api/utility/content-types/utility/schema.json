@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "utilities",
+  "info": {
+    "singularName": "utility",
+    "pluralName": "utilities",
+    "displayName": "utility"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "string"
+    },
+    "longtitude": {
+      "type": "string"
+    },
+    "pincode": {
+      "type": "string"
+    },
+    "substations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::substation.substation",
+      "mappedBy": "utility"
+    }
+  }
+}

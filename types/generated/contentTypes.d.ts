@@ -395,6 +395,38 @@ export interface ApiApplianceAppliance extends Schema.CollectionType {
   };
 }
 
+export interface ApiDerDer extends Schema.CollectionType {
+  collectionName: 'ders';
+  info: {
+    displayName: 'der';
+    pluralName: 'ders';
+    singularName: 'der';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    appliance: Attribute.Relation<
+      'api::der.der',
+      'oneToOne',
+      'api::appliance.appliance'
+    >;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::der.der', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    energy_resource: Attribute.Relation<
+      'api::der.der',
+      'manyToOne',
+      'api::energy-resource.energy-resource'
+    >;
+    publishedAt: Attribute.DateTime;
+    switched_on: Attribute.Boolean & Attribute.DefaultTo<false>;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<'api::der.der', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 export interface ApiEnergyResourceEnergyResource extends Schema.CollectionType {
   collectionName: 'energy_resources';
   info: {
@@ -407,11 +439,6 @@ export interface ApiEnergyResourceEnergyResource extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    appliances: Attribute.Relation<
-      'api::energy-resource.energy-resource',
-      'oneToMany',
-      'api::appliance.appliance'
-    >;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::energy-resource.energy-resource',
@@ -419,6 +446,11 @@ export interface ApiEnergyResourceEnergyResource extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
+    ders: Attribute.Relation<
+      'api::energy-resource.energy-resource',
+      'oneToMany',
+      'api::der.der'
+    >;
     meter: Attribute.Relation<
       'api::energy-resource.energy-resource',
       'oneToOne',
@@ -520,6 +552,7 @@ export interface ApiMeterMeter extends Schema.CollectionType {
     >;
     latitude: Attribute.Decimal;
     longitude: Attribute.Decimal;
+    max_capacity_KW: Attribute.Decimal;
     parent: Attribute.Relation<
       'api::meter.meter',
       'manyToOne',
@@ -529,6 +562,11 @@ export interface ApiMeterMeter extends Schema.CollectionType {
     productionLoadFactor: Attribute.Float & Attribute.DefaultTo<0>;
     publishedAt: Attribute.DateTime;
     state: Attribute.String;
+    transformer: Attribute.Relation<
+      'api::meter.meter',
+      'manyToOne',
+      'api::transformer.transformer'
+    >;
     type: Attribute.Enumeration<['ONE-PH', 'THREE-PH', 'SMART', 'NETMETER']>;
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<
@@ -566,6 +604,140 @@ export interface ApiP2PTradeP2PTrade extends Schema.CollectionType {
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<
       'api::p2p-trade.p2p-trade',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSubstationSubstation extends Schema.CollectionType {
+  collectionName: 'substations';
+  info: {
+    description: '';
+    displayName: 'substation';
+    pluralName: 'substations';
+    singularName: 'substation';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    city: Attribute.String;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::substation.substation',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    latitude: Attribute.String;
+    longtitude: Attribute.String;
+    max_capacity_KW: Attribute.Decimal;
+    name: Attribute.String;
+    pincode: Attribute.String;
+    publishedAt: Attribute.DateTime;
+    state: Attribute.String;
+    transformers: Attribute.Relation<
+      'api::substation.substation',
+      'oneToMany',
+      'api::transformer.transformer'
+    >;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::substation.substation',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    utility: Attribute.Relation<
+      'api::substation.substation',
+      'manyToOne',
+      'api::utility.utility'
+    >;
+  };
+}
+
+export interface ApiTransformerTransformer extends Schema.CollectionType {
+  collectionName: 'transformers';
+  info: {
+    description: '';
+    displayName: 'Transformer';
+    pluralName: 'transformers';
+    singularName: 'transformer';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    city: Attribute.String;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::transformer.transformer',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    latitude: Attribute.String;
+    longtitude: Attribute.String;
+    max_capacity_KW: Attribute.Decimal;
+    meters: Attribute.Relation<
+      'api::transformer.transformer',
+      'oneToMany',
+      'api::meter.meter'
+    >;
+    name: Attribute.String;
+    pincode: Attribute.String;
+    publishedAt: Attribute.DateTime;
+    state: Attribute.String;
+    substation: Attribute.Relation<
+      'api::transformer.transformer',
+      'manyToOne',
+      'api::substation.substation'
+    >;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::transformer.transformer',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiUtilityUtility extends Schema.CollectionType {
+  collectionName: 'utilities';
+  info: {
+    displayName: 'utility';
+    pluralName: 'utilities';
+    singularName: 'utility';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    city: Attribute.String;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::utility.utility',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    latitude: Attribute.String;
+    longtitude: Attribute.String;
+    name: Attribute.String;
+    pincode: Attribute.String;
+    publishedAt: Attribute.DateTime;
+    state: Attribute.String;
+    substations: Attribute.Relation<
+      'api::utility.utility',
+      'oneToMany',
+      'api::substation.substation'
+    >;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::utility.utility',
       'oneToOne',
       'admin::user'
     > &
@@ -1010,10 +1182,14 @@ declare module '@strapi/types' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::appliance.appliance': ApiApplianceAppliance;
+      'api::der.der': ApiDerDer;
       'api::energy-resource.energy-resource': ApiEnergyResourceEnergyResource;
       'api::meter-dataset.meter-dataset': ApiMeterDatasetMeterDataset;
       'api::meter.meter': ApiMeterMeter;
       'api::p2p-trade.p2p-trade': ApiP2PTradeP2PTrade;
+      'api::substation.substation': ApiSubstationSubstation;
+      'api::transformer.transformer': ApiTransformerTransformer;
+      'api::utility.utility': ApiUtilityUtility;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "substations",
+  "info": {
+    "singularName": "substation",
+    "pluralName": "substations",
+    "displayName": "substation",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "string"
+    },
+    "longtitude": {
+      "type": "string"
+    },
+    "pincode": {
+      "type": "string"
+    },
+    "utility": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::utility.utility",
+      "inversedBy": "substations"
+    },
+    "transformers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::transformer.transformer",
+      "mappedBy": "substation"
+    },
+    "max_capacity_KW": {
+      "type": "decimal"
+    }
+  }
+}

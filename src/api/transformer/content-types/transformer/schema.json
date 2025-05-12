@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "transformers",
+  "info": {
+    "singularName": "transformer",
+    "pluralName": "transformers",
+    "displayName": "Transformer",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "string"
+    },
+    "longtitude": {
+      "type": "string"
+    },
+    "pincode": {
+      "type": "string"
+    },
+    "substation": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::substation.substation",
+      "inversedBy": "transformers"
+    },
+    "max_capacity_KW": {
+      "type": "decimal"
+    },
+    "meters": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::meter.meter",
+      "mappedBy": "transformer"
+    }
+  }
+}

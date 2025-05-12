@@ -28,10 +28,11 @@
       "target": "api::meter.meter",
       "mappedBy": "energyResource"
     },
-    "appliances": {
+    "ders": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::appliance.appliance"
+      "target": "api::der.der",
+      "mappedBy": "energy_resource"
     }
   }
 }
