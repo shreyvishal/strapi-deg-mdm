@@ -1,3 +1,5 @@
+const { getSimulatedTimestamp } = require("./utils");
+
 module.exports = {
   /**
    * Simple example.
@@ -8,7 +10,8 @@ module.exports = {
     task: ({ strapi }) => {
       const createMeterDataset = async (data) => {
         try {
-          const meterReadingTimestamp = new Date().toISOString();
+          const meterReadingTimestamp = getSimulatedTimestamp(new Date());
+          console.log("meterReadingTimestamp===>", meterReadingTimestamp);
           const meters = await strapi.entityService.findMany(
             "api::meter.meter",
             {
@@ -121,7 +124,7 @@ module.exports = {
       createMeterDataset();
     },
     options: {
-      rule: "*/10 * * * * *",
+      rule: process.env.LOG_CONSUMPTION_INTERVAL,
     },
   },
   dailyMeterDataAggregation: {
@@ -144,7 +147,7 @@ module.exports = {
       aggregateDailyData();
     },
     options: {
-      rule: "0/10 * * * * *", // Runs at midnight every day
+      rule: process.env.AGGREGATE_CONSUMPTION_INTERVAL, // Runs at midnight every day
     },
   },
 };
