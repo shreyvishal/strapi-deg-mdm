@@ -15,7 +15,11 @@ module.exports = {
           const meters = await strapi.entityService.findMany(
             "api::meter.meter",
             {
-              filters: {},
+              filters: {
+                energyResource: {
+                  $null: false  // This ensures energyResource exists
+                }
+              },
               populate: {
                 energyResource: {
                   populate: {
