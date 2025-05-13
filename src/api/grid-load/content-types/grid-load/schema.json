@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "grid_loads",
+  "info": {
+    "singularName": "grid-load",
+    "pluralName": "grid-loads",
+    "displayName": "grid-load",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "substation": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::substation.substation"
+    },
+    "transformer": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::transformer.transformer"
+    },
+    "current_transformer_load": {
+      "type": "float"
+    },
+    "timestamp": {
+      "type": "string"
+    }
+  }
+}

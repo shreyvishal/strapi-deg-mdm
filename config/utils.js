@@ -32,7 +32,35 @@ function getSimulatedTimestamp(timestamp) {
   return new Date(new Date(simStartTime).getTime() + deltaSimMs).toISOString();
 }
 
+const calculateBaseKWhByTransformer = (meters) => {
+  const transformerMap = {};
+
+  meters.forEach((meter) => {
+    const transformerId = meter.transformer?.id;
+
+    if (!transformerId) return;
+
+    if (!transformerMap[transformerId]) {
+      // Initialize with transformer data and baseKWh total
+      transformerMap[transformerId] = {
+        transformer: meter.transformer,
+        totalBaseKWh: 0,
+      };
+    }
+
+    const ders = meter.energyResource?.ders || [];
+    ders.forEach((der) => {
+      const baseKWh = der.appliance?.baseKWh || 0;
+      transformerMap[transformerId].totalBaseKWh += baseKWh;
+    });
+  });
+
+  // Convert to array if needed
+  return Object.values(transformerMap);
+};
+
 module.exports = {
   timeScalingRatio,
   getSimulatedTimestamp,
+  calculateBaseKWhByTransformer,
 };

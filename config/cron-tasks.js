@@ -1,4 +1,7 @@
-const { getSimulatedTimestamp } = require("./utils");
+const {
+  getSimulatedTimestamp,
+  calculateBaseKWhByTransformer,
+} = require("./utils");
 
 module.exports = {
   /**
@@ -33,10 +36,51 @@ module.exports = {
                     },
                   },
                 },
+                transformer: {
+                  populate: {
+                    substation: {},
+                  },
+                },
               },
             }
           );
-          strapi.log.info(`Found ${meters.length} `);
+          strapi.log.info(
+            `Found ${
+              meters.length
+            } meters with energy resource and transformer and substation ${JSON.stringify(
+              meters
+            )}`
+          );
+
+          // Calculate aggregate transformer consumption
+
+          const transformerConsumption = calculateBaseKWhByTransformer(meters);
+          strapi.log.info(
+            `Transformer consumption ${JSON.stringify(
+              transformerConsumption,
+              null,
+              2
+            )}`
+          );
+
+          const createGridLoad = await Promise.all(
+            transformerConsumption.map(async (load) => {
+              return await strapi.entityService.create(
+                "api::grid-load.grid-load",
+                {
+                  data: {
+                    transformer: load.transformer.id,
+                    substation: load.transformer.substation.id,
+                    timestamp: meterReadingTimestamp,
+                    current_transformer_load: load.totalBaseKWh,
+                    publishedAt: new Date(),
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                  },
+                }
+              );
+            })
+          );
 
           // Calculate power factor (random between 0.8 and 1.0)
           strapi.log.info("Starting meter dataset calculations...");
@@ -129,29 +173,6 @@ module.exports = {
     },
     options: {
       rule: process.env.LOG_CONSUMPTION_INTERVAL,
-    },
-  },
-  dailyMeterDataAggregation: {
-    task: ({ strapi }) => {
-      const aggregateDailyData = async () => {
-        try {
-          // Get all meters
-          const meters = await strapi.db.query("api::meter.meter").findMany({
-            populate: ["energyResource"],
-          });
-
-          strapi.log.info(
-            `Starting daily aggregation for ${meters.length} meters`
-          );
-        } catch (error) {
-          strapi.log.error(`Error in daily aggregation: ${error.message}`);
-        }
-      };
-
-      aggregateDailyData();
-    },
-    options: {
-      rule: process.env.AGGREGATE_CONSUMPTION_INTERVAL, // Runs at midnight every day
     },
   },
 };

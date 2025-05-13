@@ -365,6 +365,7 @@ export interface AdminUser extends Schema.CollectionType {
 export interface ApiApplianceAppliance extends Schema.CollectionType {
   collectionName: 'appliances';
   info: {
+    description: '';
     displayName: 'Appliance';
     pluralName: 'appliances';
     singularName: 'appliance';
@@ -462,6 +463,48 @@ export interface ApiEnergyResourceEnergyResource extends Schema.CollectionType {
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<
       'api::energy-resource.energy-resource',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiGridLoadGridLoad extends Schema.CollectionType {
+  collectionName: 'grid_loads';
+  info: {
+    description: '';
+    displayName: 'grid-load';
+    pluralName: 'grid-loads';
+    singularName: 'grid-load';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::grid-load.grid-load',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    current_transformer_load: Attribute.Float;
+    publishedAt: Attribute.DateTime;
+    substation: Attribute.Relation<
+      'api::grid-load.grid-load',
+      'oneToOne',
+      'api::substation.substation'
+    >;
+    timestamp: Attribute.String;
+    transformer: Attribute.Relation<
+      'api::grid-load.grid-load',
+      'oneToOne',
+      'api::transformer.transformer'
+    >;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::grid-load.grid-load',
       'oneToOne',
       'admin::user'
     > &
@@ -1184,6 +1227,7 @@ declare module '@strapi/types' {
       'api::appliance.appliance': ApiApplianceAppliance;
       'api::der.der': ApiDerDer;
       'api::energy-resource.energy-resource': ApiEnergyResourceEnergyResource;
+      'api::grid-load.grid-load': ApiGridLoadGridLoad;
       'api::meter-dataset.meter-dataset': ApiMeterDatasetMeterDataset;
       'api::meter.meter': ApiMeterMeter;
       'api::p2p-trade.p2p-trade': ApiP2PTradeP2PTrade;
