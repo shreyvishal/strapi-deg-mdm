@@ -12,27 +12,24 @@ module.exports = {
           const meters = await strapi.entityService.findMany(
             "api::meter.meter",
             {
-              filters: {
-                energyResource: {
-                  $notNull: true,
-                },
-              },
+              filters: {},
               populate: {
                 energyResource: {
-                  populate: ["appliances"],
+                  populate: {
+                    ders: {
+                      populate: {
+                        appliance: {},
+                      },
+                      filters: {
+                        switched_on: true,
+                      },
+                    },
+                  },
                 },
               },
             }
           );
-          strapi.log.info(
-            `Found ${
-              meters.length
-            } meters with energy resources===> ${JSON.stringify(
-              meters,
-              null,
-              2
-            )}`
-          );
+          strapi.log.info(`Found ${meters.length} `);
 
           // Calculate power factor (random between 0.8 and 1.0)
           strapi.log.info("Starting meter dataset calculations...");
@@ -44,18 +41,18 @@ module.exports = {
             );
 
             const totalConsumptionKWh =
-              meter.energyResource.appliances
+              meter.energyResource.ders
                 .filter(
-                  (appliance) => appliance.name !== "Solar Panel (production)"
+                  (der) => der.appliance.name !== "Solar Panel (production)"
                 )
-                .reduce((acc, appliance) => acc + appliance.baseKWh, 0) *
+                .reduce((acc, der) => acc + der.appliance.baseKWh, 0) *
               meter?.consumptionLoadFactor;
-            const totalProductionKWh = meter.energyResource.appliances
+            const totalProductionKWh = meter.energyResource.ders
               .filter(
-                (appliance) => appliance.name === "Solar Panel (production)"
+                (der) => der.appliance.name === "Solar Panel (production)"
               )
-              .reduce((acc, appliance) => {
-                return acc + appliance.baseKWh;
+              .reduce((acc, der) => {
+                return acc + der.appliance.baseKWh;
               }, 0);
             console.log("totalConsumption===>", totalConsumptionKWh);
             console.log("totalProduction===>", totalProductionKWh);
@@ -93,21 +90,6 @@ module.exports = {
 
             strapi.log.info("Creating meter dataset record...");
 
-            console.log({
-              data: {
-                meter: meter.id,
-                consumptionKWh: totalConsumptionKWh,
-                productionKWh: totalProductionKWh,
-                consumptionKVAh: consumptionKVAh,
-                avgCurrent: (consumptionCurrent + productionCurrent) / 2,
-                avgVoltage: voltage,
-                reactivePowerKVAR: consumptionKVAR + productionKVAR,
-                powerFactor: powerFactor,
-                timestamp: meterReadingTimestamp,
-                publishedAt: new Date(),
-              },
-            });
-
             return await strapi.entityService.create(
               "api::meter-dataset.meter-dataset",
               {
@@ -140,6 +122,29 @@ module.exports = {
     },
     options: {
       rule: "*/10 * * * * *",
+    },
+  },
+  dailyMeterDataAggregation: {
+    task: ({ strapi }) => {
+      const aggregateDailyData = async () => {
+        try {
+          // Get all meters
+          const meters = await strapi.db.query("api::meter.meter").findMany({
+            populate: ["energyResource"],
+          });
+
+          strapi.log.info(
+            `Starting daily aggregation for ${meters.length} meters`
+          );
+        } catch (error) {
+          strapi.log.error(`Error in daily aggregation: ${error.message}`);
+        }
+      };
+
+      aggregateDailyData();
+    },
+    options: {
+      rule: "0/10 * * * * *", // Runs at midnight every day
     },
   },
 };
