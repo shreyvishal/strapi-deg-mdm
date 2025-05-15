@@ -20,8 +20,8 @@ module.exports = {
             {
               filters: {
                 energyResource: {
-                  $null: false  // This ensures energyResource exists
-                }
+                  $null: false, // This ensures energyResource exists
+                },
               },
               populate: {
                 energyResource: {
@@ -45,26 +45,26 @@ module.exports = {
             }
           );
           strapi.log.info(
-            `Found ${
-              meters.length
-            } meters with energy resource and transformer and substation ${JSON.stringify(
-              meters
-            )}`
+            `Found ${meters.length} meters with energy resource and transformer and substation `
           );
 
           // Calculate aggregate transformer consumption
 
           const transformerConsumption = calculateBaseKWhByTransformer(meters);
-          strapi.log.info(
-            `Transformer consumption ${JSON.stringify(
-              transformerConsumption,
-              null,
-              2
-            )}`
-          );
 
+          console.log(!!process.env?.TRIGGER_GRID_LOAD_ALERT_URL);
           const createGridLoad = await Promise.all(
             transformerConsumption.map(async (load) => {
+              if (load.totalBaseKWh / load.transformer.max_capacity_KW > 0.7) {
+                if (process.env?.TRIGGER_GRID_LOAD_ALERT_URL) {
+                  strapi.log.info("Triggering grid load alert");
+                  await fetch(process.env.TRIGGER_GRID_LOAD_ALERT_URL, {
+                    method: "POST",
+                    body: JSON.stringify(load),
+                  });
+                }
+              }
+
               return await strapi.entityService.create(
                 "api::grid-load.grid-load",
                 {
@@ -105,8 +105,6 @@ module.exports = {
               .reduce((acc, der) => {
                 return acc + der.appliance.baseKWh;
               }, 0);
-            console.log("totalConsumption===>", totalConsumptionKWh);
-            console.log("totalProduction===>", totalProductionKWh);
 
             // Calculate kVAh from kWh and power factor
             const consumptionKVAh = totalConsumptionKWh / powerFactor;
