@@ -51,17 +51,24 @@ module.exports = {
           // Calculate aggregate transformer consumption
 
           const transformerConsumption = calculateBaseKWhByTransformer(meters);
-
+          console.log(JSON.stringify(transformerConsumption[0], null, 2));
           console.log(!!process.env?.TRIGGER_GRID_LOAD_ALERT_URL);
           const createGridLoad = await Promise.all(
             transformerConsumption.map(async (load) => {
               if (load.totalBaseKWh / load.transformer.max_capacity_KW > 0.7) {
                 if (process.env?.TRIGGER_GRID_LOAD_ALERT_URL) {
                   strapi.log.info("Triggering grid load alert");
-                  await fetch(process.env.TRIGGER_GRID_LOAD_ALERT_URL, {
-                    method: "POST",
-                    body: JSON.stringify(load),
-                  });
+                  try {
+                    await fetch(process.env.TRIGGER_GRID_LOAD_ALERT_URL, {
+                      method: "POST",
+                      body: JSON.stringify(load),
+                    });
+                  } catch (error) {
+                    strapi.log.error(
+                      `Error triggering grid load alert: for ${load}`,
+                      error
+                    );
+                  }
                 }
               }
 
@@ -120,22 +127,22 @@ module.exports = {
             const productionKVAR = Math.sqrt(
               Math.pow(productionKVAh, 2) - Math.pow(totalProductionKWh, 2)
             );
-            strapi.log.debug(
-              `Calculated kVAR - Consumption: ${consumptionKVAR}, Production: ${productionKVAR}`
-            );
+            // strapi.log.debug(
+            //   `Calculated kVAR - Consumption: ${consumptionKVAR}, Production: ${productionKVAR}`
+            // );
 
             // Calculate Voltage (random between 230 and 250)
             const voltage = Number((230 + Math.random() * 20).toFixed(0));
-            strapi.log.debug(`Calculated voltage: ${voltage}V`);
+            // strapi.log.debug(`Calculated voltage: ${voltage}V`);
 
             // Calculate current
             const consumptionCurrent =
               (totalConsumptionKWh * 1000) / (voltage * 1 * 60);
             const productionCurrent =
               (totalProductionKWh * 1000) / (voltage * 1 * 60);
-            strapi.log.debug(
-              `Calculated current - Consumption: ${consumptionCurrent}A, Production: ${productionCurrent}A`
-            );
+            // strapi.log.debug(
+            //   `Calculated current - Consumption: ${consumptionCurrent}A, Production: ${productionCurrent}A`
+            // );
 
             strapi.log.info("Creating meter dataset record...");
 
