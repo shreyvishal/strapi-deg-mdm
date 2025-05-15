@@ -65,9 +65,9 @@ module.exports = {
                     });
                   } catch (error) {
                     strapi.log.error(
-                      `Error triggering grid load alert: for ${load}`,
-                      error
+                      `Error triggering grid load alert: for ${load}`
                     );
+                    console.log(error);
                   }
                 }
               }
