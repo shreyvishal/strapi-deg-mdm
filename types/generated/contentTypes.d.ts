@@ -588,6 +588,7 @@ export interface ApiMeterMeter extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
+    dfp_subscription_id: Attribute.String;
     energyResource: Attribute.Relation<
       'api::meter.meter',
       'oneToOne',
@@ -618,6 +619,11 @@ export interface ApiMeterMeter extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
+    user: Attribute.Relation<
+      'api::meter.meter',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -1168,7 +1174,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     blocked: Attribute.Boolean & Attribute.DefaultTo<false>;
@@ -1186,11 +1191,17 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    meter: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::meter.meter'
+    >;
     password: Attribute.Password &
       Attribute.Private &
       Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    phone_number: Attribute.String;
     provider: Attribute.String;
     resetPasswordToken: Attribute.String & Attribute.Private;
     role: Attribute.Relation<

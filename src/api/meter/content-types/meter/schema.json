@@ -74,6 +74,15 @@
       "relation": "manyToOne",
       "target": "api::transformer.transformer",
       "inversedBy": "meters"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "meter"
+    },
+    "dfp_subscription_id": {
+      "type": "string"
     }
   }
 }
