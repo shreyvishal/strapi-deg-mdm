@@ -727,6 +727,7 @@ export interface ApiTransformerTransformer extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
+    emergency_service: Attribute.Boolean & Attribute.DefaultTo<false>;
     latitude: Attribute.String;
     longtitude: Attribute.String;
     max_capacity_KW: Attribute.Decimal;

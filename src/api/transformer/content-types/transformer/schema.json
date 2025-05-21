@@ -44,6 +44,10 @@
       "relation": "oneToMany",
       "target": "api::meter.meter",
       "mappedBy": "transformer"
+    },
+    "emergency_service": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
