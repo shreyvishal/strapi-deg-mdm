@@ -59,6 +59,10 @@ module.exports = {
                 if (process.env?.TRIGGER_GRID_LOAD_ALERT_URL) {
                   strapi.log.info("Triggering grid load alert");
                   try {
+                    console.log(
+                      "Sending grid load alert===>",
+                      JSON.stringify(load, null, 2)
+                    );
                     await fetch(process.env.TRIGGER_GRID_LOAD_ALERT_URL, {
                       method: "POST",
                       body: JSON.stringify(load),
