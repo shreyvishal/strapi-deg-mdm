@@ -55,7 +55,7 @@ module.exports = {
           console.log(!!process.env?.TRIGGER_GRID_LOAD_ALERT_URL);
           const createGridLoad = await Promise.all(
             transformerConsumption.map(async (load) => {
-              if (load.totalBaseKWh / load.transformer.max_capacity_KW > 0.7) {
+              if (load.totalBaseKWh / load.transformer.max_capacity_KW > 0.9) {
                 if (process.env?.TRIGGER_GRID_LOAD_ALERT_URL) {
                   strapi.log.info("Triggering grid load alert");
                   try {
