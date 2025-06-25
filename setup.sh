@@ -19,7 +19,7 @@ npm run build
 
 cd ../../../../
 
-docker exec -i mysql-container mysql -uroot -proot strapi_deg_mdm < strapi_deg_mdm_backup.sql
+docker exec -i mysql-container mysql -uroot -proot strapi_deg_mdm < strapi_deg_mdm_dump.sql
 
 npm install -f
 npm run develop
