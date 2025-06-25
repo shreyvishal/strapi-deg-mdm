@@ -1,6 +1,6 @@
 cp .env.example .env
 
-docker exec -i mysql-container mysql -uroot -proot -e "drop database strapi_deg_mdm;create database strapi_deg_mdm;"
+docker exec -i mysql-container mysql -uroot -proot -e "drop database strapi_deg_mdm;"
 docker exec -i mysql-container mysql -uroot -proot -e "create database strapi_deg_mdm;"
 
 
