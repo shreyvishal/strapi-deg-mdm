@@ -6,6 +6,7 @@ docker exec -i mysql-container mysql -uroot -proot -e "create database strapi_de
 
 git checkout main
 git pull 
+npm install -f
 cd src
 git clone https://github.com/beckn/strapi-plugins.git plugins
 cd plugins
