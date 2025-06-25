@@ -7,7 +7,7 @@ git pull
 cd src
 git clone https://github.com/beckn/strapi-plugins.git plugins
 cd plugins
-git checkout meter-data-simulator
+git checkout feat/meter-data-simulator
 git pull
 cd plugins/meter-data-simulator
 npm install
