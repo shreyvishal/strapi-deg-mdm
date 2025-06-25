@@ -1,6 +1,8 @@
 cp .env.example .env
 
 docker exec -i mysql-container mysql -uroot -proot -e "drop database strapi_deg_mdm;create database strapi_deg_mdm;"
+docker exec -i mysql-container mysql -uroot -proot -e "create database strapi_deg_mdm;"
+
 
 git checkout main
 git pull 
@@ -10,7 +12,7 @@ cd plugins
 git checkout feat/meter-data-simulator
 git pull
 cd plugins/meter-data-simulator
-npm install
+npm install -f
 npm run build
 
 
@@ -18,7 +20,7 @@ cd ../../../../
 
 docker exec -i mysql-container mysql -uroot -proot strapi_deg_mdm < strapi_deg_mdm_backup.sql
 
-npm install
+npm install -f
 npm run develop
 
 
